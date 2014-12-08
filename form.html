@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Local Support Form</title>
+<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="bootstrap.css" />
+<link rel="stylesheet" href="animations.css" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<link href='http://fonts.googleapis.com/css?family=Roboto:400,100,700' rel='stylesheet' type='text/css'>
+<!--[if IE]>
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+</head>
+<body>
+
+<div id = "menubar-container">
+<div id = "menubar"><a class = "menubutton" href="">Login</a></div>
+</div>
+
+
+<div class="col-md-4 col-sm-4 col-xs-4" id = "left">
+<h1 id = "hcn">Harrow</h1> 
+<h4 id = "subtitle">Community Network</h4>
+<hr></hr>
+<h4>Organisation Registration</h4>
+</div>
+
+
+<div class="col-md-8 col-sm-8 col-xs-8" id = "right">
+<div id = "form">
+<div id = "name">
+<h2 class = "headline">Name of Organisation</h2>
+<input class = "input"  id = "name" placeholder = "Harrow Community Network" type="text"></input>
+</div>
+<div id = "description">
+<h2 class = "headline">Description</h2>
+<textarea class = "textarea" id= "description" placeholder = "Enter a Description of your Organisation" type="text"></textarea>
+</div>
+<div id = "donation">
+<h2 class = "headline">Enter Donation URL</h2>
+<input class = "input"  onblur = "error()" id = "donationinput" placeholder = "http://www.example.com" type="text"></input>
+</div>
+<div id = "warning" class="alert alert-danger" role="alert" >
+  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+  <span class="sr-only">Error:</span>
+  Enter a valid email address
+</div>
+<a><img id = "continue" class = "pulse"  type = "button" src = "/images/arrow.png"></img></a>
+<img id = "check" width = "48px" src = "/images/ic_check_circle_green_48dp.png"></img>
+
+</div>
+</div>
+
+    
+</body>
+
+<script>
+$('#description').hide(); //What are the explicit names of the topics hide first
+$('#donation').hide(); //What are the explicit names of the topics hide first
+$('#warning').hide();
+$('#check').hide();
+
+var clickCount = 0; 
+
+document.getElementById('continue').onclick = function () 
+{
+    clickCount+=1; 
+    if (clickCount ==1)
+    {
+    $('#description').hide().fadeIn(1000);
+    $('#name').hide();
+    }
+    else if(clickCount ==2)
+    {
+    $('#donation').hide().fadeIn(1000);
+    $('#description').hide();
+    }
+    else if (clickCount > 2)
+    {
+    $('#warning').hide().fadeIn(1000);
+    }
+    $("#check").hide();
+};
+  
+var searchTimeout;
+document.getElementById('name').onkeypress = function () 
+{
+    if (searchTimeout != undefined) clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(validate, 250);
+};
+function validate() {
+        
+        if (document.getElementById('name').innerHTML == "")
+        {
+            $('#check').hide();
+        }
+        
+        else
+        {
+            $('#check').hide().fadeIn(500);
+        }
+        
+    }
+    
+function error()
+{
+     //var x = document.getElementById("warning");
+     document.getElementById("donationinput").style.backgroundColor = "#f2dede";
+     $('#warning').hide().fadeIn(1000);
+     //x.style.background-colo = "#1abc9a";  
+}
+    
+</script>
+
+</html>
