@@ -31,7 +31,7 @@
 <div id = "form">
 <div id = "name">
 <h2 class = "headline">Name of Organisation</h2>
-<input class = "input"  id = "name" placeholder = "Harrow Community Network" type="text"></input>
+<input class = "input"  id = "orgname" placeholder = "Harrow Community Network" type="text"></input>
 </div>
 <div id = "description">
 <h2 class = "headline">Description</h2>
@@ -39,15 +39,16 @@
 </div>
 <div id = "donation">
 <h2 class = "headline">Enter Donation URL</h2>
-<input class = "input"  onblur = "error()" id = "donationinput" placeholder = "http://www.example.com" type="text"></input>
+<input class = "input"  id = "donationinput" placeholder = "http://www.example.com" type="text"></input>
 </div>
 <div id = "warning" class="alert alert-danger" role="alert" >
   <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
   <span class="sr-only">Error:</span>
   Enter a valid email address
 </div>
-<a><img id = "continue" class = "pulse"  type = "button" src = "/images/arrow.png"></img></a>
-<img id = "check" width = "48px" src = "/images/ic_check_circle_green_48dp.png"></img>
+<a><img id = "continue" class = "pulse"  type = "button" src = "./images/arrow.png"></img></a>
+<img id = "check" width = "48px" src = "./images/ic_check_circle_green_48dp.png"></img>
+<img id = "x" width = "48px" src = "./images/redx96.png"></img>
 
 </div>
 </div>
@@ -60,49 +61,124 @@ $('#description').hide(); //What are the explicit names of the topics hide first
 $('#donation').hide(); //What are the explicit names of the topics hide first
 $('#warning').hide();
 $('#check').hide();
+$('#continue').hide();
+$('#x').hide();
 
 var clickCount = 0; 
 
 document.getElementById('continue').onclick = function () 
 {
-    clickCount+=1; 
-    if (clickCount ==1)
-    {
-    $('#description').hide().fadeIn(1000);
-    $('#name').hide();
-    }
-    else if(clickCount ==2)
+    clickCount+=1;
+    $('#continue').hide();
+    if (clickCount >=1)
     {
     $('#donation').hide().fadeIn(1000);
-    $('#description').hide();
+    $('#name').hide();
     }
-    else if (clickCount > 2)
+    else if(clickCount >=2)
     {
-    $('#warning').hide().fadeIn(1000);
+
     }
     $("#check").hide();
 };
   
 var searchTimeout;
-document.getElementById('name').onkeypress = function () 
+var check = false; 
+var x = false; 
+var input = document.getElementById('orgname');
+
+/*Validate all fields*/
+
+document.getElementById('orgname').onkeydown = function () 
 {
+    var key = event.keyCode || event.charCode;
+      
     if (searchTimeout != undefined) clearTimeout(searchTimeout);
         searchTimeout = setTimeout(validate, 250);
 };
-function validate() {
+    
+document.getElementById('donationinput').onkeydown = function () 
+{
+    var key = event.keyCode || event.charCode;
+      
+    if (searchTimeout != undefined) clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(validate, 250);
+};
+
+function validateUrl(value) {
+    var urlregex = new RegExp("^(http|https|ftp)\://([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&amp;%\$\-]+)*@)*((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(\:[0-9]+)*(/($|[a-zA-Z0-9\.\,\?\'\\\+&amp;%\$#\=~_\-]+))*$");
+    if (urlregex.test(value)) {
+        return (true);
+    }
+    return (false);
+}
+    
+    
+function validate() 
+{
         
-        if (document.getElementById('name').innerHTML == "")
+        var userinput = document.getElementById('orgname').value
+        var url = document.getElementById('donationinput').value
+    
+        
+        if (clickCount == 0)
         {
-            $('#check').hide();
-        }
+            if (document.getElementById('orgname').value.length ==0)
+            {
+                check = false; 
+                $('#check').fadeOut(1000);
+                $('#continue').fadeOut(1000);
         
+            }
+        
+            else
+            {
+                if(check != true)
+                {
+                    check = true; 
+                    $('#check').hide().fadeIn(1000);
+                    $('#continue').hide().fadeIn(1000);
+                }
+
+            }
+        }
+    
         else
         {
-            $('#check').hide().fadeIn(500);
+            if (document.getElementById('donationinput').value.length ==0)
+            {
+                $('#check').fadeOut(1000);
+                $('#continue').fadeOut(1000);
+                $('#x').fadeOut(1000);
+            }
+            
+            else
+            {
+                if (validateUrl(url) == true)
+                {
+                    check = true; 
+                    $('#check').fadeIn(1000); 
+                    $('#continue').fadeIn(1000);
+                    $('#x').fadeOut(1000);
+                    
+                }
+                
+                else
+                {
+                    check = false; 
+                    $('#check').fadeOut(1000); 
+                    $('#continue').fadeOut(1000);
+                    $('#x').fadeIn(1000);
+                    
+                }
+
+            }
+
         }
         
-    }
+}
     
+
 function error()
 {
      //var x = document.getElementById("warning");
